@@ -1,0 +1,47 @@
+/**
+*   Global classes
+**/
+
+/**
+*   General page styles
+**/
+
+body {
+  font-family: 'Lato', sans-serif;
+}
+
+a {
+  text-decoration: underline;
+  color: inherit;
+
+  &:hover,
+  &:focus {
+    color: inherit;
+  }
+}
+
+main {
+  height: 100vh;
+  padding-top: 50px;
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn {
+  &-primary {
+    background-color: $brand-primary;
+    border-color: $brand-primary;
+
+    &:hover,
+    &:not(:disabled):not(.disabled):active {
+      background-color: $brand-primary-hover;
+      border-color: $brand-primary;
+    }
+  }
+}
+
+.resultsList{
+  padding-top: 50px;
+}
