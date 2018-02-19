@@ -1,6 +1,13 @@
 /**
 *   Global classes
 **/
+.resultsList {
+  padding-top: 50px;
+}
+
+.clickable {
+  cursor: pointer;
+}
 
 /**
 *   General page styles
@@ -27,21 +34,4 @@ main {
   flex-flow: column nowrap;
   align-items: center;
   justify-content: center;
-}
-
-.btn {
-  &-primary {
-    background-color: $brand-primary;
-    border-color: $brand-primary;
-
-    &:hover,
-    &:not(:disabled):not(.disabled):active {
-      background-color: $brand-primary-hover;
-      border-color: $brand-primary;
-    }
-  }
-}
-
-.resultsList{
-  padding-top: 50px;
 }

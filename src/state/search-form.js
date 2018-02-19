@@ -15,6 +15,22 @@ export class SearchForm extends React.Component {
       },
       suggestions: [],
     };
+    this.suggestionsTheme = {
+      container: '',
+      containerOpen: '',
+      input: '',
+      inputOpen: '',
+      inputFocused: '',
+      suggestionsContainer: 'dropdown-menu',
+      suggestionsContainerOpen: 'show',
+      suggestionsList: 'list-unstyled',
+      suggestion: 'dropdown-item clickable',
+      suggestionFirst: '',
+      suggestionHighlighted: '',
+      sectionContainer: '',
+      sectionContainerFirst: '',
+      sectionTitle: '',
+    };
   }
 
 
@@ -46,9 +62,9 @@ export class SearchForm extends React.Component {
   renderSuggestion(suggestion) {
     const value = suggestion.node.name + (suggestion.node.city === null ? '' : ` (${suggestion.node.locationId})`)
     return (
-      <div>
+      <span>
         {value}
-      </div>
+      </span>
     );
   }
 
@@ -75,6 +91,7 @@ export class SearchForm extends React.Component {
           <div className="form-group col">
             <label htmlFor="fromLocation">From:</label>
             <Autosuggest
+              theme={this.suggestionsTheme}
               suggestions={this.state.suggestions}
               onSuggestionsFetchRequested={this.onSuggestionsFetchRequested.bind(this)}
               onSuggestionsClearRequested={this.onSuggestionsClearRequested.bind(this)}
@@ -97,6 +114,7 @@ export class SearchForm extends React.Component {
           <div className="form-group col">
             <label htmlFor="toLocation">To:</label>
             <Autosuggest
+              theme={this.suggestionsTheme}
               suggestions={this.state.suggestions}
               onSuggestionsFetchRequested={this.onSuggestionsFetchRequested.bind(this)}
               onSuggestionsClearRequested={this.onSuggestionsClearRequested.bind(this)}
