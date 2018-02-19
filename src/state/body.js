@@ -7,8 +7,15 @@ import {SearchView, ResultView} from '../stateless/body-views';
 
 
 export class Search extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isInProgress: false,
+    };
+  }
+
   render() {
-    return <SearchView handleSearch={this.handleSearch.bind(this)}/>;
+    return <SearchView isInProgress={this.state.isInProgress} handleSearch={this.handleSearch.bind(this)}/>;
   }
 
   handleSearch(formData) {
@@ -25,12 +32,20 @@ export class Search extends React.Component {
       alert('Please fill in the departure Date');
       return;
     }
+    this.setState({
+      isInProgress: true,
+    });
     request('https://graphql.kiwi.com/', findFlightsQuery, formData)
       .then((data) => {
-        console.log(data);
+        this.setState({
+          isInProgress: false,
+        });
         populateResults(data.allFlights.edges);
       })
       .catch((err) => {
+        this.setState({
+          isInProgress: false,
+        });
         alert(err.response.errors[0].message);
         console.log(err.response.errors);
       });
