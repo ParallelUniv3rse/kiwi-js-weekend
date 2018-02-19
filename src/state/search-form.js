@@ -1,28 +1,71 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
+import {request} from 'graphql-request';
+import {findLocationSuggestions} from '../queries';
+import Autosuggest from 'react-autosuggest';
 
 export class SearchForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      form: {
+      data: {
         fromLocation: '',
         toLocation: '',
         departDate: '',
       },
+      suggestions: [],
     };
+  }
+
+
+  onSuggestionsFetchRequested({ value }) {
+    const inputValue = value.trim();
+    const inputLength = inputValue.length;
+    const _this = this;
+    if (inputLength === 0) {
+      _this.onSuggestionsClearRequested();
+    } else {
+      request('https://graphql.kiwi.com/', findLocationSuggestions, { input: inputValue })
+        .then((data) => {
+          console.log(data);
+          this.setState({
+            suggestions: data.allLocations.edges,
+          });
+        })
+        .catch((err) => {
+          _this.onSuggestionsClearRequested();
+        });
+    }
+  }
+
+  onSuggestionsClearRequested() {
+    this.setState({
+      suggestions: [],
+    });
+  }
+
+  renderSuggestion(suggestion) {
+    const value = suggestion.node.name + (suggestion.node.city === null ? '' : ` (${suggestion.node.locationId})`)
+    return (
+      <div>
+        {value}
+      </div>
+    );
+  }
+
+  getSuggestionValue(suggestion) {
+    return suggestion.node.name;
   }
 
   handleInput(event, inputName) {
     this.setState({
-      form: { ...this.state.form, ...{ [inputName]: event.target.value } },
+      data: { ...this.state.data, ...{ [inputName]: event.target.value } },
     });
   }
 
   handleSubmit(event) {
     event.preventDefault();
-    const formData = this.state.form;
+    const formData = this.state.data;
     this.props.handleSearch(formData);
   }
 
@@ -32,21 +75,53 @@ export class SearchForm extends React.Component {
         <div className="form-row">
           <div className="form-group col">
             <label htmlFor="fromLocation">From:</label>
-            <input type="text" value={this.state.form.fromLocation} onChange={(e) => {
-              this.handleInput(e, 'fromLocation');
-            }} className="form-control" name="fromLocation" id="fromLocation" placeholder="New York"/>
+            <Autosuggest
+              suggestions={this.state.suggestions}
+              onSuggestionsFetchRequested={this.onSuggestionsFetchRequested.bind(this)}
+              onSuggestionsClearRequested={this.onSuggestionsClearRequested.bind(this)}
+              getSuggestionValue={this.getSuggestionValue.bind(this)}
+              renderSuggestion={this.renderSuggestion.bind(this)}
+              inputProps={{
+                value: this.state.data.fromLocation,
+                onChange: (e, { newValue }) => {
+                  const fakeEvent = { target: { value: newValue } };
+                  this.handleInput(fakeEvent, 'fromLocation');
+                },
+                className: 'form-control',
+                name: 'fromLocation',
+                id: 'fromLocation',
+                placeholder: 'PRG',
+                type: 'text',
+              }}
+            />
           </div>
           <div className="form-group col">
             <label htmlFor="toLocation">To:</label>
-            <input type="text" value={this.state.form.toLocation} onChange={(e) => {
-              this.handleInput(e, 'toLocation');
-            }} className="form-control" name="toLocation" id="toLocation" placeholder="London"/>
+            <Autosuggest
+              suggestions={this.state.suggestions}
+              onSuggestionsFetchRequested={this.onSuggestionsFetchRequested.bind(this)}
+              onSuggestionsClearRequested={this.onSuggestionsClearRequested.bind(this)}
+              getSuggestionValue={this.getSuggestionValue.bind(this)}
+              renderSuggestion={this.renderSuggestion.bind(this)}
+              inputProps={{
+                value: this.state.data.toLocation,
+                onChange: (e, { newValue }) => {
+                  const fakeEvent = { target: { value: newValue } };
+                  this.handleInput(fakeEvent, 'toLocation');
+                },
+                className: 'form-control',
+                name: 'toLocation',
+                id: 'toLocation',
+                placeholder: 'London',
+                type: 'text',
+              }}
+            />
           </div>
         </div>
         <div className="form-row">
           <div className="form-group col">
             <label htmlFor="departDate">Departure date:</label>
-            <input type="date" value={this.state.form.departDate} onChange={(e) => {
+            <input type="date" value={this.state.data.departDate} onChange={(e) => {
               this.handleInput(e, 'departDate');
             }} className="form-control" name="departDate" id="departDate" placeholder="Departure date"/>
           </div>
