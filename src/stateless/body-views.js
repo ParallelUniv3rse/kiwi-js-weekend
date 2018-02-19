@@ -7,12 +7,13 @@ export const SearchView = props => (
   <div className="card">
     <div className="card-body">
       <h1 className="card-title h4">Kiwi.com quick search</h1>
-      <SearchForm handleSearch={props.handleSearch}/>
+      <SearchForm isInProgress={props.isInProgress} handleSearch={props.handleSearch}/>
     </div>
   </div>
 );
 
 SearchView.propTypes = {
+  isInProgress: PropTypes.bool.isRequired,
   handleSearch: PropTypes.func.isRequired,
 };
 

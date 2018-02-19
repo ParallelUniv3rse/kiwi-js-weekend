@@ -145,7 +145,7 @@ export class SearchForm extends React.Component {
         </div>
         <div className="form-row">
           <div className="col-12 text-right">
-            <button type="submit" className="btn btn-primary">Show cheapest flights</button>
+            <button type="submit" className="btn btn-primary">{this.props.isInProgress ? 'Fetching results...' : 'Show cheapest flights'}</button>
           </div>
         </div>
       </form>
@@ -154,5 +154,6 @@ export class SearchForm extends React.Component {
 }
 
 SearchForm.propTypes = {
+  isInProgress: PropTypes.bool.isRequired,
   handleSearch: PropTypes.func.isRequired,
 };
