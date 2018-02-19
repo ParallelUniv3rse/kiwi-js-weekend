@@ -27,7 +27,6 @@ export class SearchForm extends React.Component {
     } else {
       request('https://graphql.kiwi.com/', findLocationSuggestions, { input: inputValue })
         .then((data) => {
-          console.log(data);
           this.setState({
             suggestions: data.allLocations.edges,
           });
