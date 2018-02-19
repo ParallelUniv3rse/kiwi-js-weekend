@@ -33,3 +33,17 @@ export const findFlightsQuery = `query FindFlights($fromLocation: String!, $toLo
     }
   }
 }`;
+
+export const findLocationSuggestions = `query FindLocationSuggestions($input: String!){
+  allLocations(search: $input) {
+    edges {
+      node {
+        locationId
+        name
+        city{
+          name
+        }
+      }
+    }
+  }
+}`;

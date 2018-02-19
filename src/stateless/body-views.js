@@ -15,27 +15,30 @@ SearchView.propTypes = {
   handleSearch: PropTypes.func.isRequired,
 };
 
-export const ResultsView = props => (
-  <section className="resultsList">
-    <a href="#" className="mb-2" onClick={(e) => {
-      e.preventDefault();
-      props.populateResults(null);
-    }}>&larr; search again</a>
-    {props.results.map((result, i) => {
-      result = result.node;
-      const departDate = new Date(result.departure.localTime);
-      const arrivalDate = new Date(result.arrival.localTime);
-      return (<div key={i} className="card mb-3">
-        <h5 className="card-header">{result.departure.airport.city.name}({result.departure.airport.locationId}) &rarr; {result.arrival.airport.city.name}({result.arrival.airport.locationId})</h5>
-        <div className="card-body">
-          <h6 className="card-title">Departure: {departDate.toLocaleString()}</h6>
-          <h6 className="card-title">Arrival: {arrivalDate.toLocaleString()}</h6>
-          <h6 className="card-title">Price: <strong>{result.price.amount}{result.price.currency}</strong></h6>
-        </div>
-      </div>);
-    })}
-  </section>
-);
+export const ResultsView = (props) => {
+  const resultNodes = props.results.map((result, i) => {
+    result = result.node;
+    const departDate = new Date(result.departure.localTime);
+    const arrivalDate = new Date(result.arrival.localTime);
+    return (<div key={i} className="card mb-3">
+      <h5 className="card-header">{result.departure.airport.city.name} ({result.departure.airport.locationId}) &rarr; {result.arrival.airport.city.name} ({result.arrival.airport.locationId})</h5>
+      <div className="card-body">
+        <h6 className="card-title">Departure: {departDate.toLocaleString()}</h6>
+        <h6 className="card-title">Arrival: {arrivalDate.toLocaleString()}</h6>
+        <h6 className="card-title">Price: <strong>{result.price.amount}{result.price.currency}</strong></h6>
+      </div>
+    </div>);
+  });
+  return (
+    <section className="resultsList">
+      <a href="#" className="mb-2" onClick={(e) => {
+        e.preventDefault();
+        props.populateResults(null);
+      }}>&larr; search again</a>
+      {resultNodes}
+    </section>
+  );
+};
 
 ResultsView.propTypes = {
   results: PropTypes.array.isRequired,
